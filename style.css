@@ -188,8 +188,44 @@ main { flex: 1; }
 .builder-card { text-align: center; gap: 4px; display: flex; flex-direction: column; }
 .builder-card .person-photo { margin-bottom: 12px; }
 
+a.player-card { color: inherit; }
+.card-link { font-family: "Rajdhani", sans-serif; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; font-size: .9rem; color: var(--cyan); }
+
+/* ---------- profile ---------- */
+.back-link { display: inline-block; margin-bottom: 18px; font-size: .9rem; }
+.back-link:hover { color: var(--text); }
+.profile-hero { display: grid; grid-template-columns: 300px 1fr; gap: 28px; padding: 0; }
+.profile-photo { background: #e9e6e0; min-height: 100%; }
+.profile-photo img { width: 100%; height: 100%; object-fit: cover; object-position: top center; aspect-ratio: 3/4; }
+.profile-info { padding: 26px 26px 26px 0; display: flex; flex-direction: column; gap: 12px; }
+.eyebrow-sm { font-family: "Rajdhani", sans-serif; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; color: var(--cyan); font-size: .8rem; }
+.profile-name { font-size: clamp(2.4rem, 5vw, 3.4rem); line-height: 1; }
+.profile-info .btn { align-self: flex-start; }
+.profile-th { display: flex; align-items: center; gap: 16px; }
+.sub-h { font-size: 1.5rem; margin: 36px 0 14px; }
+.chart { width: 100%; height: auto; display: block; }
+.chart .grid-line { stroke: #232734; stroke-dasharray: 3 4; }
+.chart .axis { fill: #8a91a3; font-size: 12px; font-family: Inter, sans-serif; }
+.chart-empty { color: var(--muted); padding: 30px 10px; text-align: center; }
+.bars { display: grid; gap: 14px; }
+.bar-label { display: flex; justify-content: space-between; font-size: .9rem; margin-bottom: 6px; }
+.bar-label .maxed { color: var(--gold); font-weight: 600; }
+.bar { height: 8px; border-radius: 999px; background: var(--bg-2); overflow: hidden; }
+.bar div { height: 100%; border-radius: 999px; background: linear-gradient(90deg, var(--red), var(--blue)); }
+
+/* ---------- leaderboards ---------- */
+.podium { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 8px; }
+.podium-card { text-align: center; }
+.podium-card.first { border-color: rgba(255,197,61,.5); box-shadow: 0 0 30px rgba(255,197,61,.08); }
+.medal { font-size: 2rem; }
+.podium-name { font-size: 1.3rem; margin-top: 4px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.podium-val { font-family: "Rajdhani", sans-serif; font-weight: 700; font-size: 1.5rem; margin-top: 8px; color: var(--gold); }
+.clan-chip { font-size: .75rem; font-weight: 600; padding: 3px 10px; border-radius: 999px; }
+.clan-chip.eclipse { background: rgba(255,31,31,.15); color: #ff6b6b; }
+.clan-chip.legacy { background: rgba(26,107,255,.15); color: #6ea0ff; }
+
 /* ---------- clan page ---------- */
-.tabs { display: inline-flex; gap: 6px; padding: 6px; background: var(--card); border: 1px solid var(--line-solid); border-radius: 12px; margin-bottom: 24px; }
+.tabs { display: inline-flex; flex-wrap: wrap; gap: 6px; padding: 6px; background: var(--card); border: 1px solid var(--line-solid); border-radius: 12px; margin-bottom: 24px; }
 .tab {
   padding: 10px 20px; border-radius: 8px; border: 0; cursor: pointer;
   background: transparent; color: var(--muted);
@@ -273,6 +309,16 @@ td.rank { color: var(--muted); width: 40px; }
   .hero-photo { max-width: 460px; margin: 0 auto; }
   .grid-3 { grid-template-columns: 1fr 1fr; }
   .stat-strip, .clan-stats { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 760px) {
+  .profile-hero { grid-template-columns: 1fr; }
+  .profile-photo img { aspect-ratio: 4/3; }
+  .profile-info { padding: 0 20px 22px; }
+  .podium { gap: 8px; }
+  .podium-card { padding: 14px 8px; }
+  .medal { font-size: 1.4rem; }
+  .podium-name { font-size: 1rem; }
+  .podium-val { font-size: 1.1rem; }
 }
 @media (max-width: 680px) {
   .nav-toggle { display: block; }

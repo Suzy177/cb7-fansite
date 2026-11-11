@@ -1,4 +1,4 @@
-// CB7 fan site – live data from the StatHut backend
+// CB7 fan site – auto-updated data from the StatHut backend (refreshes every 2 hours)
 const API = "https://app.stathut.in";
 
 const CLANS = [
@@ -64,6 +64,9 @@ function clanInviteLink(tag) {
   return `https://link.clashofclans.com/en?action=OpenClanProfile&tag=${clean(tag)}`;
 }
 
+const slug = (name) => name.toLowerCase();
+const proBySlug = (s) => PROS.find((p) => slug(p.name) === (s || "").toLowerCase());
+
 // Town Hall icon (falls back to a text badge for levels without an image)
 function thIcon(level, size = "big") {
   const n = Number(level);
@@ -96,7 +99,7 @@ function playerCard(p, fallbackName, rank, photo) {
   const trophies = pick(p, "trophies");
   const legend = pick(p, "legend_trophies");
   return `
-    <article class="card player-card ${rank % 2 ? "accent-blue" : "accent-red"}">
+    <a class="card player-card ${rank % 2 ? "accent-blue" : "accent-red"}" href="player.html?p=${slug(fallbackName)}">
       ${photo ? `<div class="person-photo"><img src="${photo}" alt="${esc(fallbackName)}" loading="lazy"><span class="rank-chip">#${rank}</span></div>` : `<span class="rank-chip">#${rank}</span>`}
       <div class="player-top">
         ${thIcon(th)}
@@ -117,14 +120,14 @@ function playerCard(p, fallbackName, rank, photo) {
         <div><div class="k">Defense Wins</div><div class="v">${fmt(pick(p, "defense_wins"))}</div></div>
         <div><div class="k">Donations</div><div class="v">${fmt(pick(p, "donations"))}</div></div>
       </div>
-      ${legend ? `<div class="muted" style="font-size:.85rem">Legend League: ${fmt(legend)}</div>` : ""}
-    </article>`;
+      <div class="card-link">View profile →</div>
+    </a>`;
 }
 
 async function loadRoster(target, { compact = false } = {}) {
   const el = $(target);
   if (!el) return;
-  el.innerHTML = `<div class="loading">Loading live roster…</div>`;
+  el.innerHTML = `<div class="loading">Loading roster…</div>`;
   const results = await Promise.allSettled(PROS.map((p) => getJSON(`/players/${clean(p.tag)}`)));
   const players = PROS.map((p, i) => ({
     meta: p,
@@ -133,7 +136,7 @@ async function loadRoster(target, { compact = false } = {}) {
   players.sort((a, b) => (pick(b.data, "trophies") || 0) - (pick(a.data, "trophies") || 0));
 
   if (players.every((p) => !p.data)) {
-    el.innerHTML = `<div class="error-box">Couldn't load live stats right now. Please try again in a bit.</div>`;
+    el.innerHTML = `<div class="error-box">Couldn't load stats right now. Please try again in a bit.</div>`;
     return;
   }
   el.innerHTML = players.map((p, i) => playerCard(p.data, p.meta.name, i + 1, p.meta.photo)).join("");
@@ -360,6 +363,177 @@ async function loadJoin() {
   }).join("");
 }
 
+// ---------- player profile ----------
+function trophyChart(history) {
+  const pts = (history || [])
+    .filter((h) => h && h.timestamp && h.trophies != null)
+    .map((h) => ({ t: new Date(h.timestamp).getTime(), v: Number(h.trophies) }))
+    .sort((a, b) => a.t - b.t);
+  if (pts.length < 2) {
+    return `<div class="chart-empty">The trophy graph builds up over time. Snapshots are taken every 2 hours, so check back soon.</div>`;
+  }
+  const W = 800, H = 260, P = { l: 52, r: 16, t: 16, b: 34 };
+  const minV = Math.min(...pts.map((p) => p.v)), maxV = Math.max(...pts.map((p) => p.v));
+  const pad = Math.max(20, Math.round((maxV - minV) * 0.15));
+  const lo = minV - pad, hi = maxV + pad;
+  const t0 = pts[0].t, t1 = pts[pts.length - 1].t;
+  const x = (t) => P.l + ((t - t0) / (t1 - t0 || 1)) * (W - P.l - P.r);
+  const y = (v) => P.t + (1 - (v - lo) / (hi - lo || 1)) * (H - P.t - P.b);
+  const line = pts.map((p, i) => `${i ? "L" : "M"}${x(p.t).toFixed(1)},${y(p.v).toFixed(1)}`).join(" ");
+  const area = `${line} L${x(t1).toFixed(1)},${H - P.b} L${x(t0).toFixed(1)},${H - P.b} Z`;
+  const ticks = [0, 0.5, 1].map((f) => Math.round(lo + (hi - lo) * f));
+  const dateLbl = (t) => new Date(t).toLocaleDateString("en-GB", { day: "numeric", month: "short" });
+  const last = pts[pts.length - 1];
+  return `
+    <svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="Trophy history chart">
+      <defs><linearGradient id="tg" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#ff1f1f" stop-opacity=".35"/><stop offset="1" stop-color="#1a6bff" stop-opacity="0"/>
+      </linearGradient></defs>
+      ${ticks.map((v) => `<line x1="${P.l}" x2="${W - P.r}" y1="${y(v)}" y2="${y(v)}" class="grid-line"/><text x="${P.l - 8}" y="${y(v) + 4}" text-anchor="end" class="axis">${fmt(v)}</text>`).join("")}
+      <path d="${area}" fill="url(#tg)"/>
+      <path d="${line}" fill="none" stroke="#ff4040" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+      <circle cx="${x(last.t)}" cy="${y(last.v)}" r="5" fill="#ffc53d"/>
+      <text x="${P.l}" y="${H - 10}" class="axis">${dateLbl(t0)}</text>
+      <text x="${W - P.r}" y="${H - 10}" text-anchor="end" class="axis">${dateLbl(t1)}</text>
+    </svg>`;
+}
+
+function heroBars(progress) {
+  const heroes = (progress && progress.heroes) || [];
+  if (!heroes.length) return `<p class="muted">Hero data isn't available yet.</p>`;
+  return `<div class="bars">${heroes.map((h) => {
+    const lvl = Number(h.level) || 0, max = Number(h.maxLevel) || lvl || 1;
+    const pct = Math.min(100, Math.round((lvl / max) * 100));
+    return `<div class="bar-row">
+      <div class="bar-label"><span>${esc(h.name)}</span><span class="${lvl >= max ? "maxed" : "muted"}">${lvl >= max ? "MAX " : ""}${lvl} / ${max}</span></div>
+      <div class="bar"><div style="width:${pct}%"></div></div>
+    </div>`;
+  }).join("")}</div>`;
+}
+
+async function loadProfile() {
+  const el = $("#profile");
+  if (!el) return;
+  const pro = proBySlug(new URLSearchParams(location.search).get("p"));
+  if (!pro) {
+    el.innerHTML = `<div class="error-box">Player not found. <a href="roster.html" style="text-decoration:underline">Back to the roster</a></div>`;
+    return;
+  }
+  document.title = `${pro.name} | CB7 Esports Fan Site`;
+  const t = clean(pro.tag);
+  const [pR, hR, wR, gR] = await Promise.allSettled([
+    getJSON(`/players/${t}`),
+    getJSON(`/players/${t}/history?limit=500`),
+    getJSON(`/players/${t}/war-stats`),
+    getJSON(`/players/${t}/progress`),
+  ]);
+  const p = pR.status === "fulfilled" ? pR.value : null;
+  if (!p) {
+    el.innerHTML = `<div class="error-box">Couldn't load ${esc(pro.name)}'s stats right now. Please try again in a bit.</div>`;
+    return;
+  }
+  const history = hR.status === "fulfilled" ? hR.value.history || [] : [];
+  const war = wR.status === "fulfilled" ? wR.value : null;
+  const prog = gR.status === "fulfilled" ? gR.value : null;
+  const sum = (prog && prog.summary) || {};
+  const pctBox = (lbl, v) => `<div class="stat-box"><div class="num">${v != null ? Math.round(v) + "%" : "–"}</div><div class="lbl">${lbl}</div></div>`;
+  const hasWar = war && Number(war.wars_participated) > 0;
+
+  el.innerHTML = `
+    <div class="profile-hero card">
+      ${pro.photo ? `<div class="profile-photo"><img src="${pro.photo}" alt="${esc(pro.name)}"></div>` : ""}
+      <div class="profile-info">
+        <div class="eyebrow-sm">CB7 Esports · Pro Player</div>
+        <h1 class="display profile-name">${esc(pro.name)}</h1>
+        <div class="muted">${esc(pick(p, "name"))} · ${esc(pro.tag)}</div>
+        <div class="profile-th">${thIcon(pick(p, "town_hall_level"))}
+          <div class="player-trophy" style="flex:1"><span class="num">🏆 ${fmt(pick(p, "trophies"))}</span><span class="lbl">trophies</span></div>
+        </div>
+        <div class="kv">
+          <div><div class="k">Best</div><div class="v">${fmt(pick(p, "best_trophies"))}</div></div>
+          <div><div class="k">War Stars</div><div class="v">${fmt(pick(p, "war_stars"))}</div></div>
+          <div><div class="k">XP Level</div><div class="v">${fmt(pick(p, "exp_level"))}</div></div>
+          <div><div class="k">Attack Wins</div><div class="v">${fmt(pick(p, "attack_wins"))}</div></div>
+          <div><div class="k">Defense Wins</div><div class="v">${fmt(pick(p, "defense_wins"))}</div></div>
+          <div><div class="k">Legend Best</div><div class="v">${fmt(pick(p, "legend_best_trophies"))}</div></div>
+        </div>
+        <a class="btn btn-ghost" style="margin-top:16px" href="https://link.clashofclans.com/en?action=OpenPlayerProfile&tag=${t}" target="_blank" rel="noopener">Open in game ↗</a>
+      </div>
+    </div>
+
+    <h3 class="display sub-h">Trophy History</h3>
+    <div class="card">${trophyChart(history)}</div>
+
+    <h3 class="display sub-h">Base Progress</h3>
+    <div class="clan-stats" style="margin-top:0">
+      ${pctBox("Heroes", sum.heroes_pct)}${pctBox("Troops", sum.troops_pct)}${pctBox("Spells", sum.spells_pct)}${pctBox("Equipment", sum.equipment_pct)}
+    </div>
+    <div class="card" style="margin-top:14px">${heroBars(prog)}</div>
+
+    <h3 class="display sub-h">War Stats</h3>
+    ${hasWar ? `
+      <div class="clan-stats" style="margin-top:0">
+        <div class="stat-box"><div class="num">${fmt(war.wars_participated)}</div><div class="lbl">Wars tracked</div></div>
+        <div class="stat-box"><div class="num">${fmt(war.total_attacks)}</div><div class="lbl">Attacks</div></div>
+        <div class="stat-box"><div class="num">${Number(war.avg_stars || 0).toFixed(2)}</div><div class="lbl">Avg stars</div></div>
+        <div class="stat-box"><div class="num">${fmt(war.three_star_count)}</div><div class="lbl">Three-stars</div></div>
+      </div>
+      <p class="muted" style="font-size:.85rem;margin-top:10px">Average destruction ${Number(war.avg_destruction || 0).toFixed(1)}%. Based on wars recorded by StatHut.</p>`
+    : `<div class="card"><p class="muted">No tracked wars yet. Lifetime war stars: <strong style="color:var(--text)">${fmt(pick(p, "war_stars"))}</strong>. Detailed war stats appear here once this player's wars are recorded by StatHut.</p></div>`}
+
+    <div class="updated">Updated ${timeAgo(pick(p, "timestamp"))} · refreshes every 2 hours</div>`;
+}
+
+// ---------- combined leaderboards ----------
+const LB_CATS = [
+  { key: "trophies", label: "Trophies", icon: "🏆" },
+  { key: "donations", label: "Donations", icon: "🎁" },
+  { key: "war_stars", label: "War Stars", icon: "⭐" },
+  { key: "town_hall_level", label: "Town Hall", icon: "🏰" },
+];
+
+async function loadLeaderboards() {
+  const tabs = $("#lb-tabs"), table = $("#lb-table"), podium = $("#lb-podium");
+  if (!tabs) return;
+  table.innerHTML = `<div class="loading">Loading leaderboards…</div>`;
+  const results = await Promise.allSettled(CLANS.map((c) => getJSON(`/clans/${clean(c.tag)}/leaderboard?sort_by=trophies`)));
+  let all = [];
+  results.forEach((r, i) => {
+    if (r.status === "fulfilled") (r.value.members || []).forEach((m) => all.push({ ...m, clan: CLANS[i].short }));
+  });
+  if (!all.length) { table.innerHTML = `<div class="error-box">Couldn't load leaderboards right now. Please try again in a bit.</div>`; return; }
+  const cats = LB_CATS.filter((c) => all.some((m) => m[c.key] != null));
+  let cat = cats[0];
+
+  const draw = () => {
+    tabs.innerHTML = cats.map((c) => `<button class="tab ${c === cat ? "active" : ""}" data-k="${c.key}">${c.label}</button>`).join("");
+    tabs.querySelectorAll(".tab").forEach((b) => b.addEventListener("click", () => { cat = cats.find((c) => c.key === b.dataset.k); draw(); }));
+    const sorted = [...all].sort((a, b) => (b[cat.key] || 0) - (a[cat.key] || 0) || (b.trophies || 0) - (a.trophies || 0));
+    const val = (m) => cat.key === "town_hall_level" ? thIcon(m.town_hall_level, "mini") : `${cat.icon} ${fmt(m[cat.key])}`;
+    const medals = ["🥇", "🥈", "🥉"];
+    podium.innerHTML = sorted.slice(0, 3).map((m, i) => `
+      <div class="card podium-card ${i === 0 ? "first" : ""}">
+        <div class="medal">${medals[i]}</div>
+        <div class="display podium-name">${esc(m.name)}</div>
+        <div class="muted" style="font-size:.8rem">CB7 ${esc(m.clan)}</div>
+        <div class="podium-val">${val(m)}</div>
+      </div>`).join("");
+    table.innerHTML = `
+      <div class="table-wrap"><table>
+        <thead><tr><th>#</th><th>Player</th><th>Clan</th><th class="sorted">${cat.label} ▼</th></tr></thead>
+        <tbody>${sorted.map((m, i) => `
+          <tr>
+            <td class="rank">${i + 1}</td>
+            <td><div>${esc(m.name)}</div><div class="role ${esc(m.role)}">${ROLE[m.role] || ""}</div></td>
+            <td><span class="clan-chip ${m.clan.toLowerCase()}">${esc(m.clan)}</span></td>
+            <td class="num">${val(m)}</td>
+          </tr>`).join("")}</tbody>
+      </table></div>`;
+  };
+  draw();
+  $("#lb-updated").textContent = `${all.length} members across ${CLANS.length} clans · refreshes every 2 hours`;
+}
+
 // ---------- boot ----------
 document.addEventListener("DOMContentLoaded", () => {
   initNav();
@@ -368,4 +542,6 @@ document.addEventListener("DOMContentLoaded", () => {
   if (page === "roster") { loadRoster("#roster"); loadBuilders(); }
   if (page === "clans") initClansPage();
   if (page === "join") loadJoin();
+  if (page === "player") loadProfile();
+  if (page === "leaderboards") loadLeaderboards();
 });

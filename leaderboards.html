@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Leaderboards | CB7 Esports Fan Site</title>
+<meta name="description" content="Combined leaderboards for CB7 Eclipse and CB7 Legacy members.">
+<meta name="theme-color" content="#07080b">
+<meta property="og:title" content="Leaderboards | CB7 Esports Fan Site">
+<meta property="og:description" content="Combined leaderboards for CB7 Eclipse and CB7 Legacy members.">
+<meta property="og:image" content="https://cb7.stathut.in/assets/team.jpg">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://cb7.stathut.in/leaderboards.html">
+<meta property="og:site_name" content="CB7 Esports Fan Site">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://cb7.stathut.in/assets/team.jpg">
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body data-page="leaderboards">
+<header class="site-header">
+  <nav class="nav">
+    <a class="nav-logo" href="index.html"><img src="assets/logo-wide.png" alt="CB7 Esports"></a>
+    <button class="nav-toggle" aria-label="Menu">☰</button>
+    <ul class="nav-links">
+      <li><a href="index.html" data-page="home">Home</a></li>
+      <li><a href="roster.html" data-page="roster">Roster</a></li>
+      <li><a href="clans.html" data-page="clans">Clans</a></li>
+      <li><a href="leaderboards.html" data-page="leaderboards">Leaderboards</a></li>
+      <li><a href="join.html" data-page="join">Join</a></li>
+    </ul>
+  </nav>
+</header>
+<div class="stripe"></div>
+<main>
+<section class="section">
+  <div class="container">
+    <div class="section-head">
+      <div class="eyebrow">Community</div>
+      <h2 class="display">CB7 Leaderboards</h2>
+      <p>Every member of CB7 Eclipse and CB7 Legacy, ranked together. Updated every 2 hours.</p>
+    </div>
+    <div class="tabs" id="lb-tabs"></div>
+    <div id="lb-podium" class="podium"></div>
+    <div id="lb-table"></div>
+    <div class="updated" id="lb-updated"></div>
+  </div>
+</section>
+</main>
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div>Fan-made site for <strong>CB7 Esports</strong> · Not an official CB7 website · © <span id="year"></span></div>
+    <div><a href="https://discord.gg/cb7" target="_blank" rel="noopener">CB7 Discord</a> · Statistics powered by <a href="https://stathut.in" target="_blank" rel="noopener">StatHut</a></div>
+  </div>
+  <div class="footer-inner" style="padding-top:0;font-size:.75rem">
+    This material is unofficial and is not endorsed by Supercell. For more information see Supercell's Fan Content Policy.
+  </div>
+</footer>
+<script src="app.js"></script>
+</body>
+</html>
