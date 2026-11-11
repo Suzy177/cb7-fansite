@@ -64,6 +64,19 @@ function clanInviteLink(tag) {
   return `https://link.clashofclans.com/en?action=OpenClanProfile&tag=${clean(tag)}`;
 }
 
+// Town Hall icon (falls back to a text badge for levels without an image)
+function thIcon(level, size = "big") {
+  const n = Number(level);
+  if (n >= 9 && n <= 18) {
+    return size === "big"
+      ? `<div class="th-img"><img src="assets/th/th${n}.png" alt="TH${n}"><span>TH${n}</span></div>`
+      : `<span class="th-inline"><img class="th-mini" src="assets/th/th${n}.png" alt="TH${n}" title="TH${n}">${n}</span>`;
+  }
+  return size === "big"
+    ? `<div class="th-badge"><div><small>TH</small><span>${level ?? "?"}</span></div></div>`
+    : `${level ?? "–"}`;
+}
+
 // ---------- nav ----------
 function initNav() {
   const page = document.body.dataset.page;
@@ -87,7 +100,7 @@ function playerCard(p, fallbackName, rank, photo) {
     <article class="card player-card ${rank % 2 ? "accent-blue" : "accent-red"}">
       ${photo ? `<div class="person-photo"><img src="${photo}" alt="${esc(fallbackName)}" loading="lazy"><span class="rank-chip">#${rank}</span></div>` : `<span class="rank-chip">#${rank}</span>`}
       <div class="player-top">
-        <div class="th-badge"><div><small>TH</small><span>${th ?? "?"}</span></div></div>
+        ${thIcon(th)}
         <div>
           <div class="player-name display">${esc(name)}</div>
           <div class="player-sub">${esc(clanName || "No clan")} · Lvl ${fmt(pick(p, "exp_level"))}</div>
@@ -204,7 +217,7 @@ function membersTable(members, sortKey) {
             <tr>
               <td class="rank">${i + 1}</td>
               <td><div>${esc(m.name)}</div><div class="role ${esc(m.role)}">${ROLE[m.role] || ""}</div></td>
-              <td class="num">${fmt(m.town_hall_level)}</td>
+              <td class="num th-cell">${thIcon(m.town_hall_level, "mini")}</td>
               <td class="num">🏆 ${fmt(m.trophies)}</td>
               <td class="num">${fmt(m.donations)}</td>
               <td class="num">${fmt(m.donations_received)}</td>
