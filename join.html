@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Join | CB7 Esports Fan Site</title>
+<meta name="description" content="Join a CB7 community clan in Clash of Clans.">
+<meta name="theme-color" content="#07080b">
+<meta property="og:title" content="Join | CB7 Esports Fan Site">
+<meta property="og:description" content="Join a CB7 community clan in Clash of Clans.">
+<meta property="og:image" content="assets/team.jpg">
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body data-page="join">
+<header class="site-header">
+  <nav class="nav">
+    <a class="nav-logo" href="index.html"><img src="assets/logo-wide.png" alt="CB7 Esports"></a>
+    <button class="nav-toggle" aria-label="Menu">☰</button>
+    <ul class="nav-links">
+      <li><a href="index.html" data-page="home">Home</a></li>
+      <li><a href="roster.html" data-page="roster">Roster</a></li>
+      <li><a href="clans.html" data-page="clans">Clans</a></li>
+      <li><a href="join.html" data-page="join">Join</a></li>
+    </ul>
+  </nav>
+</header>
+<div class="stripe"></div>
+<main>
+<section class="section">
+  <div class="container">
+    <div class="section-head">
+      <div class="eyebrow">Recruitment</div>
+      <h2 class="display">Join the CB7 Family</h2>
+      <p>Want to clash alongside the CB7 community? Pick a clan below and check how many spots are open.</p>
+    </div>
+    <div class="grid grid-2" id="join-clans"><div class="loading">Loading clans…</div></div>
+  </div>
+</section>
+<section class="section" style="padding-top:0">
+  <div class="container">
+    <div class="grid grid-2">
+      <div class="card">
+        <h3 class="display" style="font-size:1.5rem;margin-bottom:16px">How to join</h3>
+        <ol class="steps">
+          <li><div><strong>Join the CB7 Discord</strong><br><span class="muted">It's the home of the community. Introduce yourself there.</span></div></li>
+          <li><div><strong>Pick a clan</strong><br><span class="muted">Use "Open in game" above to view the clan profile.</span></div></li>
+          <li><div><strong>Send a request</strong><br><span class="muted">Mention you found them through Discord.</span></div></li>
+        </ol>
+      </div>
+      <div class="card accent-blue" style="display:flex;flex-direction:column;justify-content:center;gap:14px">
+        <h3 class="display" style="font-size:1.5rem">Join the community</h3>
+        <p class="muted">Events, updates and the latest from CB7's run at Worlds all happen on Discord.</p>
+        <div><a class="btn btn-primary" href="https://discord.gg/cb7" target="_blank" rel="noopener">Join the CB7 Discord</a></div>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div>Fan-made site for <strong>CB7 Esports</strong> · Not an official CB7 website · © <span id="year"></span></div>
+    <div><a href="https://discord.gg/cb7" target="_blank" rel="noopener">CB7 Discord</a> · Live data by <a href="https://stathut.in" target="_blank" rel="noopener">StatHut</a></div>
+  </div>
+  <div class="footer-inner" style="padding-top:0;font-size:.75rem">
+    This material is unofficial and is not endorsed by Supercell. For more information see Supercell's Fan Content Policy.
+  </div>
+</footer>
+<script src="app.js"></script>
+</body>
+</html>

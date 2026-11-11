@@ -1,0 +1,264 @@
+:root {
+  --bg: #07080b;
+  --bg-2: #0e1016;
+  --card: #12141c;
+  --card-2: #181b25;
+  --line: #23273463;
+  --line-solid: #232734;
+  --text: #eef1f7;
+  --muted: #8a91a3;
+  --red: #ff1f1f;
+  --red-deep: #b30000;
+  --blue: #1a6bff;
+  --cyan: #19d3ff;
+  --gold: #ffc53d;
+  --win: #2fd27a;
+  --radius: 14px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Inter", system-ui, sans-serif;
+  line-height: 1.5;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+a { color: inherit; text-decoration: none; }
+img { max-width: 100%; display: block; }
+
+.display { font-family: "Rajdhani", "Inter", sans-serif; font-weight: 700; letter-spacing: .02em; text-transform: uppercase; }
+
+/* ---------- header ---------- */
+.site-header {
+  position: sticky; top: 0; z-index: 50;
+  background: rgba(7, 8, 11, .82);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--line-solid);
+}
+.nav {
+  max-width: 1160px; margin: 0 auto; padding: 12px 20px;
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+}
+.nav-logo img { height: 34px; width: auto; }
+.nav-links { display: flex; gap: 4px; list-style: none; }
+.nav-links a {
+  padding: 8px 14px; border-radius: 8px;
+  font-family: "Rajdhani", sans-serif; font-weight: 600; font-size: 1.05rem;
+  text-transform: uppercase; letter-spacing: .05em; color: var(--muted);
+  transition: color .15s, background .15s;
+}
+.nav-links a:hover { color: var(--text); background: var(--card); }
+.nav-links a.active { color: var(--text); background: linear-gradient(90deg, rgba(255,31,31,.18), rgba(26,107,255,.18)); }
+.nav-toggle { display: none; background: none; border: 0; color: var(--text); font-size: 1.6rem; cursor: pointer; }
+
+/* ---------- layout ---------- */
+main { flex: 1; }
+.container { max-width: 1160px; margin: 0 auto; padding: 0 20px; }
+.section { padding: 64px 0; }
+.section-head { margin-bottom: 28px; }
+.section-head .eyebrow {
+  font-family: "Rajdhani", sans-serif; font-weight: 700; font-size: .9rem;
+  letter-spacing: .25em; text-transform: uppercase; color: var(--cyan);
+}
+.section-head h2 { font-size: clamp(2rem, 4vw, 2.8rem); line-height: 1.05; margin-top: 4px; }
+.section-head p { color: var(--muted); margin-top: 8px; max-width: 620px; }
+
+.stripe { height: 4px; background: linear-gradient(90deg, var(--red) 0 50%, var(--blue) 50% 100%); }
+
+/* ---------- hero ---------- */
+.hero {
+  position: relative; overflow: hidden;
+  background:
+    radial-gradient(ellipse at 15% 20%, rgba(255,31,31,.22), transparent 55%),
+    radial-gradient(ellipse at 90% 80%, rgba(26,107,255,.22), transparent 55%),
+    var(--bg);
+}
+.hero-inner {
+  max-width: 1160px; margin: 0 auto; padding: 56px 20px 0;
+  display: grid; grid-template-columns: 1.05fr .95fr; gap: 32px; align-items: end;
+}
+.hero-copy { padding-bottom: 64px; }
+.badge-pill {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 6px 14px; border-radius: 999px;
+  background: rgba(255,197,61,.1); border: 1px solid rgba(255,197,61,.35);
+  color: var(--gold); font-weight: 600; font-size: .85rem;
+}
+.hero-logo { width: min(440px, 90%); margin: 22px 0 18px; filter: drop-shadow(0 10px 40px rgba(255,31,31,.25)); }
+.hero h1 { font-size: clamp(1.6rem, 3vw, 2.3rem); line-height: 1.15; }
+.hero p.lead { color: var(--muted); margin-top: 12px; max-width: 480px; font-size: 1.05rem; }
+.hero-cta { display: flex; gap: 12px; margin-top: 28px; flex-wrap: wrap; }
+.hero-photo { align-self: end; mask-image: linear-gradient(to bottom, #000 75%, transparent); -webkit-mask-image: linear-gradient(to bottom, #000 75%, transparent); }
+
+.btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 12px 22px; border-radius: 10px;
+  font-family: "Rajdhani", sans-serif; font-weight: 700; font-size: 1.05rem;
+  letter-spacing: .06em; text-transform: uppercase;
+  border: 1px solid transparent; cursor: pointer; transition: transform .15s, box-shadow .15s, background .15s;
+}
+.btn:hover { transform: translateY(-2px); }
+.btn-primary { background: linear-gradient(135deg, var(--red), var(--red-deep)); color: #fff; box-shadow: 0 8px 24px rgba(255,31,31,.3); }
+.btn-ghost { background: var(--card); border-color: var(--line-solid); color: var(--text); }
+.btn-ghost:hover { border-color: var(--blue); }
+
+/* ---------- stat strip ---------- */
+.stat-strip { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+.stat-box {
+  background: var(--card); border: 1px solid var(--line-solid); border-radius: var(--radius);
+  padding: 18px 20px;
+}
+.stat-box .num { font-family: "Rajdhani", sans-serif; font-weight: 700; font-size: 2rem; line-height: 1; }
+.stat-box .lbl { color: var(--muted); font-size: .85rem; margin-top: 6px; }
+
+/* ---------- cards ---------- */
+.grid { display: grid; gap: 18px; }
+.grid-2 { grid-template-columns: repeat(2, 1fr); }
+.grid-3 { grid-template-columns: repeat(3, 1fr); }
+.card {
+  background: var(--card); border: 1px solid var(--line-solid); border-radius: var(--radius);
+  padding: 22px; position: relative; overflow: hidden;
+}
+.card.accent-red::before, .card.accent-blue::before {
+  content: ""; position: absolute; inset: 0 0 auto 0; height: 3px;
+}
+.card.accent-red::before { background: var(--red); }
+.card.accent-blue::before { background: var(--blue); }
+
+.achv { display: flex; gap: 14px; align-items: center; }
+.achv .icon { font-size: 1.7rem; width: 48px; height: 48px; border-radius: 12px; display: grid; place-items: center; background: var(--card-2); flex-shrink: 0; }
+.achv h3 { font-size: 1.05rem; }
+.achv p { color: var(--muted); font-size: .9rem; }
+
+/* ---------- player cards ---------- */
+.player-card { display: flex; flex-direction: column; gap: 16px; transition: transform .2s, border-color .2s; }
+.player-card:hover { transform: translateY(-4px); border-color: rgba(26,107,255,.6); }
+.player-top { display: flex; align-items: center; gap: 14px; }
+.th-badge {
+  width: 58px; height: 58px; border-radius: 14px; flex-shrink: 0;
+  display: grid; place-items: center; text-align: center;
+  background: linear-gradient(135deg, var(--red), var(--blue));
+  font-family: "Rajdhani", sans-serif; font-weight: 700; line-height: 1;
+}
+.th-badge small { display: block; font-size: .65rem; letter-spacing: .1em; opacity: .85; }
+.th-badge span { font-size: 1.45rem; }
+.player-name { font-size: 1.5rem; line-height: 1.05; }
+.player-sub { color: var(--muted); font-size: .85rem; }
+.player-trophy {
+  display: flex; align-items: baseline; gap: 8px;
+  padding: 14px 16px; border-radius: 12px; background: var(--card-2);
+}
+.player-trophy .num { font-family: "Rajdhani", sans-serif; font-weight: 700; font-size: 2.2rem; color: var(--gold); line-height: 1; }
+.player-trophy .lbl { color: var(--muted); font-size: .85rem; }
+.kv { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.kv div { background: var(--bg-2); border-radius: 10px; padding: 10px 12px; display: flex; flex-direction: column; justify-content: space-between; gap: 4px; }
+.kv .k, .kv .v { background: none; padding: 0; }
+.kv .k { color: var(--muted); font-size: .72rem; text-transform: uppercase; letter-spacing: .08em; }
+.kv .v { font-family: "Rajdhani", sans-serif; font-weight: 700; font-size: 1.25rem; }
+.rank-chip {
+  position: absolute; top: 16px; right: 16px;
+  font-family: "Rajdhani", sans-serif; font-weight: 700; font-size: 1rem;
+  color: var(--muted);
+}
+
+/* ---------- clan page ---------- */
+.tabs { display: inline-flex; gap: 6px; padding: 6px; background: var(--card); border: 1px solid var(--line-solid); border-radius: 12px; margin-bottom: 24px; }
+.tab {
+  padding: 10px 20px; border-radius: 8px; border: 0; cursor: pointer;
+  background: transparent; color: var(--muted);
+  font-family: "Rajdhani", sans-serif; font-weight: 700; font-size: 1.1rem; letter-spacing: .05em; text-transform: uppercase;
+}
+.tab.active { background: linear-gradient(135deg, var(--red), var(--blue)); color: #fff; }
+
+.clan-head { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
+.clan-head img { width: 84px; height: 84px; }
+.clan-head h2 { font-size: 2.2rem; line-height: 1; }
+.clan-head .tag { color: var(--muted); font-size: .9rem; }
+.clan-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-top: 20px; }
+
+.war-card { margin-top: 18px; }
+.war-state { display: inline-block; padding: 4px 12px; border-radius: 999px; font-size: .8rem; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; }
+.war-state.inWar { background: rgba(255,31,31,.15); color: var(--red); }
+.war-state.preparation { background: rgba(255,197,61,.15); color: var(--gold); }
+.war-state.warEnded { background: rgba(138,145,163,.15); color: var(--muted); }
+.war-vs { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 16px; margin-top: 16px; text-align: center; }
+.war-side .name { font-family: "Rajdhani", sans-serif; font-weight: 700; font-size: 1.3rem; }
+.war-side .stars { font-family: "Rajdhani", sans-serif; font-weight: 700; font-size: 2.6rem; line-height: 1.1; }
+.war-side .pct { color: var(--muted); font-size: .9rem; }
+.war-side.us .stars { color: var(--cyan); }
+.war-side.them .stars { color: var(--red); }
+.war-vs .vs { font-family: "Rajdhani", sans-serif; font-weight: 700; color: var(--muted); font-size: 1.2rem; }
+
+.table-wrap { overflow-x: auto; margin-top: 18px; border-radius: var(--radius); border: 1px solid var(--line-solid); }
+table { width: 100%; border-collapse: collapse; background: var(--card); font-size: .92rem; }
+th, td { padding: 12px 14px; text-align: left; white-space: nowrap; }
+th {
+  background: var(--card-2); color: var(--muted); font-weight: 600; font-size: .75rem;
+  text-transform: uppercase; letter-spacing: .08em; cursor: pointer; user-select: none;
+}
+th.sorted { color: var(--cyan); }
+tbody tr { border-top: 1px solid var(--line-solid); }
+tbody tr:hover { background: var(--card-2); }
+td.num { font-family: "Rajdhani", sans-serif; font-weight: 700; font-size: 1.05rem; }
+td.rank { color: var(--muted); width: 40px; }
+.role { font-size: .75rem; color: var(--muted); }
+.role.leader { color: var(--gold); }
+.role.coLeader { color: var(--cyan); }
+
+/* ---------- misc ---------- */
+.muted { color: var(--muted); }
+.loading, .error-box { color: var(--muted); padding: 24px; text-align: center; }
+.error-box { color: #ff8a8a; }
+.updated { color: var(--muted); font-size: .8rem; margin-top: 10px; }
+.photo-frame { border-radius: var(--radius); overflow: hidden; border: 1px solid var(--line-solid); }
+
+.join-card .clan-mini { display: flex; align-items: center; gap: 14px; margin-bottom: 14px; }
+.join-card .clan-mini img { width: 60px; height: 60px; }
+.join-card ul { list-style: none; display: grid; gap: 8px; margin: 14px 0 20px; }
+.join-card li { display: flex; justify-content: space-between; border-bottom: 1px dashed var(--line-solid); padding-bottom: 8px; }
+.join-card li span:first-child { color: var(--muted); }
+
+.steps { counter-reset: s; display: grid; gap: 14px; }
+.steps li { list-style: none; counter-increment: s; display: flex; gap: 14px; align-items: flex-start; }
+.steps li::before {
+  content: counter(s); flex-shrink: 0; width: 34px; height: 34px; border-radius: 50%;
+  display: grid; place-items: center; font-family: "Rajdhani", sans-serif; font-weight: 700;
+  background: linear-gradient(135deg, var(--red), var(--blue));
+}
+
+/* ---------- footer ---------- */
+.site-footer { border-top: 1px solid var(--line-solid); margin-top: 40px; }
+.footer-inner {
+  max-width: 1160px; margin: 0 auto; padding: 28px 20px;
+  display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+  color: var(--muted); font-size: .85rem;
+}
+.footer-inner a { color: var(--text); }
+.footer-inner a:hover { color: var(--cyan); }
+
+/* ---------- responsive ---------- */
+@media (max-width: 900px) {
+  .hero-inner { grid-template-columns: 1fr; padding-top: 36px; }
+  .hero-copy { padding-bottom: 0; text-align: center; }
+  .hero-logo { margin-left: auto; margin-right: auto; }
+  .hero p.lead { margin-left: auto; margin-right: auto; }
+  .hero-cta { justify-content: center; }
+  .hero-photo { max-width: 460px; margin: 0 auto; }
+  .grid-3 { grid-template-columns: 1fr 1fr; }
+  .stat-strip, .clan-stats { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 680px) {
+  .nav-toggle { display: block; }
+  .nav-links {
+    display: none; position: absolute; top: 100%; left: 0; right: 0;
+    flex-direction: column; padding: 10px 20px 16px; background: var(--bg); border-bottom: 1px solid var(--line-solid);
+  }
+  .nav-links.open { display: flex; }
+  .grid-2, .grid-3 { grid-template-columns: 1fr; }
+  .section { padding: 44px 0; }
+  .war-side .stars { font-size: 2rem; }
+}

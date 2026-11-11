@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CB7 Esports | Fan Site</title>
+<meta name="description" content="Fan-made CB7 Esports site with live Clash of Clans roster stats, wars and leaderboards.">
+<meta name="theme-color" content="#07080b">
+<meta property="og:title" content="CB7 Esports | Fan Site">
+<meta property="og:description" content="Fan-made CB7 Esports site with live Clash of Clans roster stats, wars and leaderboards.">
+<meta property="og:image" content="assets/team.jpg">
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body data-page="home">
+<header class="site-header">
+  <nav class="nav">
+    <a class="nav-logo" href="index.html"><img src="assets/logo-wide.png" alt="CB7 Esports"></a>
+    <button class="nav-toggle" aria-label="Menu">☰</button>
+    <ul class="nav-links">
+      <li><a href="index.html" data-page="home">Home</a></li>
+      <li><a href="roster.html" data-page="roster">Roster</a></li>
+      <li><a href="clans.html" data-page="clans">Clans</a></li>
+      <li><a href="join.html" data-page="join">Join</a></li>
+    </ul>
+  </nav>
+</header>
+<div class="stripe"></div>
+<main>
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-copy">
+      <span class="badge-pill">🏆 Qualified for the 2026 World Finals</span>
+      <img class="hero-logo" src="assets/logo-wide.png" alt="CB7">
+      <h1 class="display">International Clash of Clans esports, built to compete at the highest level.</h1>
+      <p class="lead">Follow the CB7 roster on the road to Worlds, with live trophies, live wars and leaderboards from the CB7 community clans.</p>
+      <div class="hero-cta">
+        <a class="btn btn-primary" href="roster.html">Meet the roster</a>
+        <a class="btn btn-ghost" href="join.html">Join a CB7 clan</a>
+      </div>
+    </div>
+    <img class="hero-photo" src="assets/team.jpg" alt="CB7 roster: PJ, Anakin, Shiaki, Lotasa and Mugi">
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="stat-strip">
+      <div class="stat-box"><div class="num">2025</div><div class="lbl">Founded</div></div>
+      <div class="stat-box"><div class="num">5</div><div class="lbl">Pro players</div></div>
+      <div class="stat-box"><div class="num" id="pro-avg">–</div><div class="lbl">Avg roster trophies (live)</div></div>
+      <div class="stat-box"><div class="num">2</div><div class="lbl">Community clans</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="section" style="padding-top:0">
+  <div class="container">
+    <div class="section-head">
+      <div class="eyebrow">Live now</div>
+      <h2 class="display">Community Clans</h2>
+      <p>War status from CB7 Eclipse and CB7 Legacy, updated automatically.</p>
+    </div>
+    <div class="grid grid-2" id="home-wars"><div class="loading">Loading live wars…</div></div>
+  </div>
+</section>
+
+<section class="section" style="padding-top:0">
+  <div class="container">
+    <div class="section-head">
+      <div class="eyebrow">Achievements</div>
+      <h2 class="display">The Road So Far</h2>
+    </div>
+    <div class="grid grid-3">
+      <div class="card achv accent-red"><div class="icon">🌍</div><div><h3>World Finals 2026</h3><p>Qualified</p></div></div>
+      <div class="card achv accent-blue"><div class="icon">🥇</div><div><h3>June Monthly Finals</h3><p>Top 4</p></div></div>
+      <div class="card achv accent-red"><div class="icon">⚔️</div><div><h3>July Monthly Finals</h3><p>Top 9–12</p></div></div>
+      <div class="card achv accent-blue"><div class="icon">🥉</div><div><h3>FCC Clash Cup</h3><p>3rd Place</p></div></div>
+      <div class="card achv accent-red"><div class="icon">📈</div><div><h3>CCN Ranking</h3><p>Top 10</p></div></div>
+      <div class="card achv accent-blue"><div class="icon">🤝</div><div><h3>Community</h3><p>Players, creators and fans</p></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="section" style="padding-top:0">
+  <div class="container">
+    <div class="section-head">
+      <div class="eyebrow">Live stats</div>
+      <h2 class="display">The Roster</h2>
+      <p>Ranked by current trophies.</p>
+    </div>
+    <div class="grid grid-3" id="home-roster"></div>
+    <div class="updated" id="home-roster-updated"></div>
+  </div>
+</section>
+</main>
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div>Fan-made site for <strong>CB7 Esports</strong> · Not an official CB7 website · © <span id="year"></span></div>
+    <div><a href="https://discord.gg/cb7" target="_blank" rel="noopener">CB7 Discord</a> · Live data by <a href="https://stathut.in" target="_blank" rel="noopener">StatHut</a></div>
+  </div>
+  <div class="footer-inner" style="padding-top:0;font-size:.75rem">
+    This material is unofficial and is not endorsed by Supercell. For more information see Supercell's Fan Content Policy.
+  </div>
+</footer>
+<script src="app.js"></script>
+</body>
+</html>
