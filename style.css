@@ -18,6 +18,7 @@
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
+html, body { overflow-x: hidden; }
 body {
   background: var(--bg);
   color: var(--text);
@@ -79,7 +80,7 @@ main { flex: 1; }
 }
 .hero-inner {
   max-width: 1160px; margin: 0 auto; padding: 56px 20px 0;
-  display: grid; grid-template-columns: 1.05fr .95fr; gap: 32px; align-items: end;
+  display: grid; grid-template-columns: minmax(0,1.05fr) minmax(0,.95fr); gap: 32px; align-items: end;
 }
 .hero-copy { padding-bottom: 64px; }
 .badge-pill {
@@ -92,7 +93,7 @@ main { flex: 1; }
 .hero h1 { font-size: clamp(1.6rem, 3vw, 2.3rem); line-height: 1.15; }
 .hero p.lead { color: var(--muted); margin-top: 12px; max-width: 480px; font-size: 1.05rem; }
 .hero-cta { display: flex; gap: 12px; margin-top: 28px; flex-wrap: wrap; }
-.hero-photo { align-self: end; mask-image: linear-gradient(to bottom, #000 75%, transparent); -webkit-mask-image: linear-gradient(to bottom, #000 75%, transparent); }
+.hero-photo { width: 100%; align-self: end; mask-image: linear-gradient(to bottom, #000 75%, transparent); -webkit-mask-image: linear-gradient(to bottom, #000 75%, transparent); }
 
 .btn {
   display: inline-flex; align-items: center; gap: 8px;
@@ -153,16 +154,16 @@ main { flex: 1; }
   font-family: "Rajdhani", sans-serif; font-weight: 700; font-size: .72rem; letter-spacing: .05em;
   padding: 0 7px; border-radius: 999px; background: linear-gradient(90deg, var(--red), var(--blue)); white-space: nowrap;
 }
-.th-inline { display: inline-flex; align-items: center; gap: 6px; }
+.th-inline { display: inline-flex; align-items: center; gap: 6px; margin-right: 12px; }
 .th-mini { width: 30px; height: 30px; object-fit: contain; }
 .th-cell { white-space: nowrap; }
 .player-name { font-size: 1.5rem; line-height: 1.05; }
 .player-sub { color: var(--muted); font-size: .85rem; }
 .player-trophy {
-  display: flex; align-items: baseline; gap: 8px;
+  display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap;
   padding: 14px 16px; border-radius: 12px; background: var(--card-2);
 }
-.player-trophy .num { font-family: "Rajdhani", sans-serif; font-weight: 700; font-size: 2.2rem; color: var(--gold); line-height: 1; }
+.player-trophy .num { white-space: nowrap; font-family: "Rajdhani", sans-serif; font-weight: 700; font-size: 2.2rem; color: var(--gold); line-height: 1; }
 .player-trophy .lbl { color: var(--muted); font-size: .85rem; }
 .kv { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
 .kv div { background: var(--bg-2); border-radius: 10px; padding: 10px 12px; display: flex; flex-direction: column; justify-content: space-between; gap: 4px; }
@@ -176,10 +177,10 @@ main { flex: 1; }
 }
 
 .person-photo {
-  position: relative; margin: -22px -22px 0; aspect-ratio: 3 / 4; max-height: 340px; overflow: hidden;
+  position: relative; margin: -22px -22px 0; height: 340px; overflow: hidden;
   background: #e9e6e0;
 }
-.person-photo img { width: 100%; height: 100%; object-fit: cover; object-position: top center; }
+.person-photo img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: top center; }
 .person-photo::after { content: ""; position: absolute; inset: auto 0 0 0; height: 40%; background: linear-gradient(to top, var(--card), transparent); }
 .person-photo .rank-chip {
   z-index: 2; top: 12px; right: 12px; color: #fff;
@@ -301,7 +302,7 @@ td.rank { color: var(--muted); width: 40px; }
 
 /* ---------- responsive ---------- */
 @media (max-width: 900px) {
-  .hero-inner { grid-template-columns: 1fr; padding-top: 36px; }
+  .hero-inner { grid-template-columns: minmax(0,1fr); padding-top: 36px; }
   .hero-copy { padding-bottom: 0; text-align: center; }
   .hero-logo { margin-left: auto; margin-right: auto; }
   .hero p.lead { margin-left: auto; margin-right: auto; }
@@ -321,6 +322,22 @@ td.rank { color: var(--muted); width: 40px; }
   .podium-val { font-size: 1.1rem; }
 }
 @media (max-width: 680px) {
+  .hide-sm { display: none; }
+  .hero h1 { font-size: 1.45rem; }
+  .hero-logo { width: min(320px, 85%); }
+  .hero-cta .btn { flex: 1 1 140px; justify-content: center; white-space: nowrap; font-size: .95rem; padding: 12px 14px; }
+  .person-photo { height: 300px; }
+  .profile-th .player-trophy .num { font-size: 1.8rem; }
+  .profile-name { font-size: 2.4rem; }
+  .clan-head h2 { font-size: 1.7rem; }
+  .clan-head .btn { margin-left: 0 !important; width: 100%; justify-content: center; }
+  th, td { padding: 10px 8px; }
+  td.th-cell { padding-right: 14px; }
+  .th-mini { width: 24px; height: 24px; }
+  .th-inline { gap: 4px; }
+  .section-head .eyebrow { letter-spacing: .15em; }
+  .war-side .name { font-size: 1.05rem; word-break: break-word; }
+  .stat-box .num { font-size: 1.6rem; }
   .nav-toggle { display: block; }
   .nav-links {
     display: none; position: absolute; top: 100%; left: 0; right: 0;

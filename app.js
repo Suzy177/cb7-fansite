@@ -7,17 +7,17 @@ const CLANS = [
 ];
 
 const PROS = [
-  { tag: "#9RGLCULUG", name: "PJ", photo: "assets/people/pj.jpg" },
-  { tag: "#92GYU0Q8V", name: "Shiaki", photo: "assets/people/shiaki.jpg" },
-  { tag: "#QVJPCQV0J", name: "Lotasa", photo: "assets/people/lotasa.jpg" },
-  { tag: "#QL2VRQGU0", name: "Anakin", photo: "assets/people/anakin.jpg" },
-  { tag: "#LLPGYR0LU", name: "Mugi", photo: "assets/people/mugi.jpg" },
+  { tag: "#9RGLCULUG", name: "PJ", photo: "assets/people/pj.jpg?v=2" },
+  { tag: "#92GYU0Q8V", name: "Shiaki", photo: "assets/people/shiaki.jpg?v=2" },
+  { tag: "#QVJPCQV0J", name: "Lotasa", photo: "assets/people/lotasa.jpg?v=2" },
+  { tag: "#QL2VRQGU0", name: "Anakin", photo: "assets/people/anakin.jpg?v=2" },
+  { tag: "#LLPGYR0LU", name: "Mugi", photo: "assets/people/mugi.jpg?v=2" },
 ];
 
 const BUILDERS = [
-  { name: "Jotape", photo: "assets/people/jotape.jpg" },
-  { name: "Loope", photo: "assets/people/loope.jpg" },
-  { name: "Satans", photo: "assets/people/satans.jpg" },
+  { name: "Jotape", photo: "assets/people/jotape.jpg?v=2" },
+  { name: "Loope", photo: "assets/people/loope.jpg?v=2" },
+  { name: "Satans", photo: "assets/people/satans.jpg?v=2" },
 ];
 
 const DISCORD = "https://discord.gg/cb7";
@@ -202,7 +202,7 @@ const SORTS = {
 
 function membersTable(members, sortKey) {
   const sorted = [...members].sort((a, b) => SORTS[sortKey](b) - SORTS[sortKey](a));
-  const head = (key, label) => `<th data-sort="${key}" class="${key === sortKey ? "sorted" : ""}">${label}${key === sortKey ? " ▼" : ""}</th>`;
+  const head = (key, label, extra = "") => `<th data-sort="${key}" class="${key === sortKey ? "sorted" : ""} ${extra}">${label}${key === sortKey ? " ▼" : ""}</th>`;
   return `
     <div class="table-wrap">
       <table>
@@ -211,8 +211,8 @@ function membersTable(members, sortKey) {
           ${head("town_hall_level", "TH")}
           ${head("trophies", "Trophies")}
           ${head("donations", "Donated")}
-          ${head("donations_received", "Received")}
-          ${head("exp_level", "Level")}
+          ${head("donations_received", "Received", "hide-sm")}
+          ${head("exp_level", "Level", "hide-sm")}
         </tr></thead>
         <tbody>
           ${sorted.map((m, i) => `
@@ -222,8 +222,8 @@ function membersTable(members, sortKey) {
               <td class="num th-cell">${thIcon(m.town_hall_level, "mini")}</td>
               <td class="num">🏆 ${fmt(m.trophies)}</td>
               <td class="num">${fmt(m.donations)}</td>
-              <td class="num">${fmt(m.donations_received)}</td>
-              <td class="num">${fmt(m.exp_level)}</td>
+              <td class="num hide-sm">${fmt(m.donations_received)}</td>
+              <td class="num hide-sm">${fmt(m.exp_level)}</td>
             </tr>`).join("")}
         </tbody>
       </table>
@@ -372,7 +372,8 @@ function trophyChart(history) {
   if (pts.length < 2) {
     return `<div class="chart-empty">The trophy graph builds up over time. Snapshots are taken every 2 hours, so check back soon.</div>`;
   }
-  const W = 800, H = 260, P = { l: 52, r: 16, t: 16, b: 34 };
+  const narrow = window.innerWidth < 600;
+  const W = narrow ? 420 : 800, H = narrow ? 240 : 260, P = { l: narrow ? 46 : 52, r: 12, t: 16, b: 34 };
   const minV = Math.min(...pts.map((p) => p.v)), maxV = Math.max(...pts.map((p) => p.v));
   const pad = Math.max(20, Math.round((maxV - minV) * 0.15));
   const lo = minV - pad, hi = maxV + pad;
