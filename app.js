@@ -95,7 +95,6 @@ function playerCard(p, fallbackName, rank, photo) {
   const th = pick(p, "town_hall_level");
   const trophies = pick(p, "trophies");
   const legend = pick(p, "legend_trophies");
-  const clanName = pick(p, "clan_name");
   return `
     <article class="card player-card ${rank % 2 ? "accent-blue" : "accent-red"}">
       ${photo ? `<div class="person-photo"><img src="${photo}" alt="${esc(fallbackName)}" loading="lazy"><span class="rank-chip">#${rank}</span></div>` : `<span class="rank-chip">#${rank}</span>`}
@@ -103,7 +102,7 @@ function playerCard(p, fallbackName, rank, photo) {
         ${thIcon(th)}
         <div>
           <div class="player-name display">${esc(name)}</div>
-          <div class="player-sub">${esc(clanName || "No clan")} · Lvl ${fmt(pick(p, "exp_level"))}</div>
+          <div class="player-sub">${esc(pick(p, "tag") || "")}</div>
         </div>
       </div>
       <div class="player-trophy">
