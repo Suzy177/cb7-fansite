@@ -7,11 +7,17 @@ const CLANS = [
 ];
 
 const PROS = [
-  { tag: "#9RGLCULUG", name: "PJ" },
-  { tag: "#92GYU0Q8V", name: "Shiaki" },
-  { tag: "#QVJPCQV0J", name: "Lotasa" },
-  { tag: "#QL2VRQGU0", name: "Anakin" },
-  { tag: "#LLPGYR0LU", name: "Mugi" },
+  { tag: "#9RGLCULUG", name: "PJ", photo: "assets/people/pj.jpg" },
+  { tag: "#92GYU0Q8V", name: "Shiaki", photo: "assets/people/shiaki.jpg" },
+  { tag: "#QVJPCQV0J", name: "Lotasa", photo: "assets/people/lotasa.jpg" },
+  { tag: "#QL2VRQGU0", name: "Anakin", photo: "assets/people/anakin.jpg" },
+  { tag: "#LLPGYR0LU", name: "Mugi", photo: "assets/people/mugi.jpg" },
+];
+
+const BUILDERS = [
+  { name: "Jotape", photo: "assets/people/jotape.jpg" },
+  { name: "Loope", photo: "assets/people/loope.jpg" },
+  { name: "Satans", photo: "assets/people/satans.jpg" },
 ];
 
 const DISCORD = "https://discord.gg/cb7";
@@ -71,7 +77,7 @@ function initNav() {
 }
 
 // ---------- roster ----------
-function playerCard(p, fallbackName, rank) {
+function playerCard(p, fallbackName, rank, photo) {
   const name = p ? pick(p, "name") : fallbackName;
   const th = pick(p, "town_hall_level");
   const trophies = pick(p, "trophies");
@@ -79,7 +85,7 @@ function playerCard(p, fallbackName, rank) {
   const clanName = pick(p, "clan_name");
   return `
     <article class="card player-card ${rank % 2 ? "accent-blue" : "accent-red"}">
-      <span class="rank-chip">#${rank}</span>
+      ${photo ? `<div class="person-photo"><img src="${photo}" alt="${esc(fallbackName)}" loading="lazy"><span class="rank-chip">#${rank}</span></div>` : `<span class="rank-chip">#${rank}</span>`}
       <div class="player-top">
         <div class="th-badge"><div><small>TH</small><span>${th ?? "?"}</span></div></div>
         <div>
@@ -118,7 +124,7 @@ async function loadRoster(target, { compact = false } = {}) {
     el.innerHTML = `<div class="error-box">Couldn't load live stats right now. Please try again in a bit.</div>`;
     return;
   }
-  el.innerHTML = players.map((p, i) => playerCard(p.data, p.meta.name, i + 1)).join("");
+  el.innerHTML = players.map((p, i) => playerCard(p.data, p.meta.name, i + 1, p.meta.photo)).join("");
 
   const latest = players.map((p) => pick(p.data, "timestamp")).filter(Boolean).sort().pop();
   const up = $(target + "-updated");
@@ -130,6 +136,17 @@ async function loadRoster(target, { compact = false } = {}) {
     const t = players.map((p) => pick(p.data, "trophies")).filter((x) => x);
     if (t.length) sumEl.textContent = fmt(Math.round(t.reduce((a, b) => a + b, 0) / t.length));
   }
+}
+
+function loadBuilders() {
+  const el = $("#builders");
+  if (!el) return;
+  el.innerHTML = BUILDERS.map((b, i) => `
+    <article class="card builder-card ${i % 2 ? "accent-blue" : "accent-red"}">
+      <div class="person-photo"><img src="${b.photo}" alt="${esc(b.name)}" loading="lazy"></div>
+      <div class="player-name display">${esc(b.name)}</div>
+      <div class="player-sub">Base Builder</div>
+    </article>`).join("");
 }
 
 // ---------- clans ----------
@@ -336,7 +353,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initNav();
   const page = document.body.dataset.page;
   if (page === "home") { loadHomeWars(); loadRoster("#home-roster"); }
-  if (page === "roster") loadRoster("#roster");
+  if (page === "roster") { loadRoster("#roster"); loadBuilders(); }
   if (page === "clans") initClansPage();
   if (page === "join") loadJoin();
 });
