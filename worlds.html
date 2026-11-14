@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>World Finals | CB7 Esports Fan Site</title>
+<meta name="description" content="Follow CB7 Esports at the Clash of Clans World Championship 2026 Finals: match results and bracket run.">
+<meta name="theme-color" content="#07080b">
+<meta property="og:title" content="World Finals | CB7 Esports Fan Site">
+<meta property="og:description" content="Follow CB7 Esports at the Clash of Clans World Championship 2026 Finals: match results and bracket run.">
+<meta property="og:image" content="https://cb7.stathut.in/assets/team.jpg">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://cb7.stathut.in/worlds.html">
+<meta property="og:site_name" content="CB7 Esports Fan Site">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://cb7.stathut.in/assets/team.jpg">
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css?v=6">
+</head>
+<body data-page="worlds">
+<header class="site-header">
+  <nav class="nav">
+    <a class="nav-logo" href="index.html"><img src="assets/logo-wide.png" alt="CB7 Esports"></a>
+    <button class="nav-toggle" aria-label="Menu">☰</button>
+    <ul class="nav-links">
+      <li><a href="index.html" data-page="home">Home</a></li>
+      <li><a href="worlds.html" data-page="worlds" class="nav-worlds">Worlds <span class="live-dot"></span></a></li>
+      <li><a href="roster.html" data-page="roster">Roster</a></li>
+      <li><a href="clans.html" data-page="clans">Clans</a></li>
+      <li><a href="leaderboards.html" data-page="leaderboards">Leaderboards</a></li>
+      <li><a href="join.html" data-page="join">Join</a></li>
+    </ul>
+  </nav>
+</header>
+<div class="stripe"></div>
+<main>
+<section class="worlds-hero">
+  <div class="container">
+    <div class="eyebrow-sm">Clash of Clans World Championship 2026</div>
+    <h1 class="display worlds-title">CB7 at the World Finals</h1>
+    <p class="muted" id="w-meta">14–15 November · 8 teams · double elimination</p>
+    <div class="worlds-status" id="w-status"></div>
+    <div class="hero-cta" style="justify-content:flex-start">
+      <a class="btn btn-primary" id="w-watch" href="https://event.supercell.com/clashofclans/en" target="_blank" rel="noopener">▶ Watch live</a>
+      <a class="btn btn-ghost" id="w-yt" href="https://www.youtube.com/@ClashOfClans" target="_blank" rel="noopener">YouTube</a>
+    </div>
+  </div>
+</section>
+<section class="section" style="padding-top:28px">
+  <div class="container">
+    <h3 class="display sub-h" style="margin-top:0">CB7's Matches</h3>
+    <div id="w-matches" class="match-list"><div class="loading">Loading results…</div></div>
+    <div class="updated" id="w-updated"></div>
+  </div>
+</section>
+<section class="section" style="padding-top:0">
+  <div class="container">
+    <h3 class="display sub-h" style="margin-top:0">The 8 Teams</h3>
+    <div id="w-teams" class="grid grid-2 teams-grid"></div>
+    <p class="muted" style="font-size:.8rem;margin-top:14px">Fan-made tracker. Results are added manually as matches finish, so check the official broadcast for the very latest.</p>
+  </div>
+</section>
+</main>
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div>Fan-made site for <strong>CB7 Esports</strong> · Not an official CB7 website · © <span id="year"></span></div>
+    <div><a href="https://discord.gg/cb7" target="_blank" rel="noopener">CB7 Discord</a> · Statistics powered by <a href="https://stathut.in" target="_blank" rel="noopener">StatHut</a></div>
+  </div>
+  <div class="footer-inner" style="padding-top:0;font-size:.75rem">
+    This material is unofficial and is not endorsed by Supercell. For more information see Supercell's Fan Content Policy.
+  </div>
+</footer>
+<script src="app.js?v=6"></script>
+<div id="tsparticles"></div>
+<script src="https://cdn.jsdelivr.net/npm/@tsparticles/slim@3.5.0/tsparticles.slim.bundle.min.js"></script>
+<script src="particles.js?v=1"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.2/anime.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/motion@11.11.13/dist/motion.js"></script>
+<script src="effects.js?v=2"></script>
+</body>
+</html>

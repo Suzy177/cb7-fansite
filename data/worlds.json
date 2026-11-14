@@ -1,0 +1,24 @@
+{
+  "event": "Clash of Clans World Championship 2026 – World Finals",
+  "dates": "14–15 November 2026",
+  "format": "8-team double elimination · every match is a Bo1 war",
+  "watch_url": "https://event.supercell.com/clashofclans/en",
+  "youtube_url": "https://www.youtube.com/@ClashOfClans",
+  "status": "upcoming",
+  "status_note": "Day 1 starts today. Results are added here as matches finish.",
+  "placement": "",
+  "updated": "2026-11-14T01:00:00Z",
+  "matches": [
+    { "round": "Upper Bracket – Round 1", "opponent": "TBA", "cb7": null, "opp": null, "status": "upcoming", "time_utc": "" }
+  ],
+  "teams": [
+    { "name": "ZOOS Esports", "route": "June Monthly Final winner" },
+    { "name": "Repotted Gaming", "route": "July Monthly Final winner" },
+    { "name": "Vatic Esports", "route": "August Monthly Final winner" },
+    { "name": "HTM Esports", "route": "September Monthly Final winner" },
+    { "name": "FuChing NO.1", "route": "China Qualifier" },
+    { "name": "Tribe Gaming", "route": "LCQ 1st · reigning champion" },
+    { "name": "CB7 Esports", "route": "LCQ 2nd", "us": true },
+    { "name": "MG Esports", "route": "LCQ 3rd" }
+  ]
+}

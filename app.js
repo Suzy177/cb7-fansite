@@ -535,6 +535,66 @@ async function loadLeaderboards() {
   $("#lb-updated").textContent = `${all.length} members across ${CLANS.length} clans · refreshes every 2 hours`;
 }
 
+// ---------- world finals ----------
+const MATCH_LABEL = { upcoming: "Upcoming", live: "Live now", win: "Won", loss: "Lost" };
+
+function matchCard(m) {
+  const st = m.status || "upcoming";
+  const hasScore = m.cb7 != null && m.opp != null;
+  const when = m.time_utc ? new Date(m.time_utc).toLocaleString([], { weekday: "short", hour: "2-digit", minute: "2-digit" }) : "";
+  return `
+    <div class="card match-card ${esc(st)}">
+      <div class="match-top">
+        <span class="match-round">${esc(m.round || "")}</span>
+        <span class="match-status ${esc(st)}">${st === "live" ? '<span class="live-dot" style="margin:0 6px 0 0"></span>' : ""}${MATCH_LABEL[st] || esc(st)}</span>
+      </div>
+      <div class="match-vs">
+        <div class="match-team us"><img src="assets/favicon.png" alt=""><span>CB7</span></div>
+        <div class="match-score">${hasScore ? `<b class="${st === "win" ? "w" : ""}">${m.cb7}</b><i>–</i><b class="${st === "loss" ? "w" : ""}">${m.opp}</b>` : `<span class="match-when">${when || "vs"}</span>`}</div>
+        <div class="match-team them"><span>${esc(m.opponent || "TBA")}</span></div>
+      </div>
+      ${hasScore ? `<div class="match-foot muted">⭐ stars · Bo1 war${when ? " · " + when : ""}</div>` : ""}
+    </div>`;
+}
+
+async function loadWorlds() {
+  const listEl = $("#w-matches");
+  if (!listEl) return;
+  let d;
+  try {
+    const res = await fetch(`data/worlds.json?t=${Date.now()}`, { cache: "no-store" });
+    d = await res.json();
+  } catch (e) {
+    if (loadWorlds._last) return; // keep showing the last good results
+    listEl.innerHTML = `<div class="error-box">Couldn't load results right now. Please refresh in a moment.</div>`;
+    return;
+  }
+  const sig = JSON.stringify(d);
+  if (loadWorlds._last === sig) return; // nothing new: skip re-render so cards don't re-animate
+  loadWorlds._last = sig;
+  if (d.watch_url) $("#w-watch").href = d.watch_url;
+  if (d.youtube_url) $("#w-yt").href = d.youtube_url;
+  $("#w-meta").textContent = `${d.dates} · ${d.format}`;
+  const statusText = {
+    upcoming: "⏳ Starting soon",
+    live: "🔴 Live now",
+    finished: "🏁 Finished",
+  }[d.status] || "";
+  $("#w-status").innerHTML = `
+    <span class="ws-chip ${esc(d.status)}">${statusText}</span>
+    ${d.placement ? `<span class="ws-place">🏆 CB7 placed ${esc(d.placement)}</span>` : ""}
+    ${d.status_note ? `<div class="muted ws-note">${esc(d.status_note)}</div>` : ""}`;
+  const matches = d.matches || [];
+  listEl.innerHTML = matches.length ? matches.map(matchCard).join("") : `<div class="card muted">No matches yet. Check back once Day 1 starts.</div>`;
+  const w = matches.filter((m) => m.status === "win").length, l = matches.filter((m) => m.status === "loss").length;
+  $("#w-updated").textContent = `Record so far: ${w}W – ${l}L · last updated ${timeAgo(d.updated)} · this page refreshes every minute`;
+  $("#w-teams").innerHTML = (d.teams || []).map((t) => `
+    <div class="card team-row ${t.us ? "us" : ""}">
+      <div class="display team-name">${esc(t.name)}</div>
+      <div class="muted team-route">${esc(t.route)}</div>
+    </div>`).join("");
+}
+
 // ---------- boot ----------
 document.addEventListener("DOMContentLoaded", () => {
   initNav();
@@ -545,4 +605,5 @@ document.addEventListener("DOMContentLoaded", () => {
   if (page === "join") loadJoin();
   if (page === "player") loadProfile();
   if (page === "leaderboards") loadLeaderboards();
+  if (page === "worlds") { loadWorlds(); setInterval(loadWorlds, 60000); }
 });

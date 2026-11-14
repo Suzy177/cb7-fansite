@@ -57,12 +57,12 @@
     if (h1 && !h1.querySelector(".w")) {
       h1.innerHTML = h1.textContent.trim().split(/\s+/).map((w) => `<span class="w">${w}</span>`).join(" ");
     }
-    const parts = hero.querySelectorAll(".badge-pill, .hero-logo, .lead, .hero-cta");
+    const parts = hero.querySelectorAll(".badge-pill, .logo-glitter, .lead, .hero-cta");
     const photo = hero.querySelector(".hero-photo");
     A.set([...parts, ...hero.querySelectorAll("h1 .w")], { opacity: 0 });
     if (photo) A.set(photo, { opacity: 0 });
     const tl = A.timeline({ easing: "easeOutExpo" });
-    tl.add({ targets: hero.querySelectorAll(".badge-pill, .hero-logo"), opacity: [0, 1], translateY: [24, 0], scale: [0.95, 1], duration: 800, delay: A.stagger(120) })
+    tl.add({ targets: hero.querySelectorAll(".badge-pill, .logo-glitter"), opacity: [0, 1], translateY: [24, 0], scale: [0.95, 1], duration: 800, delay: A.stagger(120) })
       .add({ targets: hero.querySelectorAll("h1 .w"), opacity: [0, 1], translateY: [40, 0], rotate: [8, 0], duration: 900, delay: A.stagger(45) }, "-=500")
       .add({ targets: hero.querySelectorAll(".lead, .hero-cta"), opacity: [0, 1], translateY: [20, 0], duration: 700, delay: A.stagger(120) }, "-=600");
     if (photo) tl.add({ targets: photo, opacity: [0, 1], translateX: [60, 0], duration: 1200 }, 300);
