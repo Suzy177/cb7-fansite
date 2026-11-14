@@ -536,6 +536,152 @@ async function loadLeaderboards() {
 }
 
 // ---------- world finals ----------
+// Bracket comes from the StatHut backend (which reads the official event feed every minute).
+// If that's unreachable, the site falls back to the snapshot in data/worlds.json.
+const WORLDS_LIVE = API + "/worlds/bracket";
+const ROUND = {
+  1: "Upper Round 1", 2: "Upper Round 1", 3: "Upper Round 1", 4: "Upper Round 1",
+  5: "Lower Round 1", 6: "Lower Round 1", 7: "Upper Semifinal", 8: "Upper Semifinal",
+  9: "Lower Round 2", 10: "Lower Round 2", 11: "Upper Final", 12: "Lower Semifinal",
+  13: "Lower Final", 14: "Grand Final", 15: "Grand Final Reset",
+};
+const isCB7 = (t) => t && (t.short === "CB7" || /^CB7/i.test(t.name || ""));
+
+function feedLabel(m, byId) {
+  // "Winner of Upper Round 1 (CB7 vs RPG)" style placeholder for empty slots
+  return (m.from || []).map((f) => {
+    const src = byId[f.match];
+    if (!src) return "TBA";
+    const names = (src.teams || []).map((t) => (t ? t.short : "?")).join(" vs ");
+    return `${f.result === "loser" ? "Loser" : "Winner"} of ${names.includes("?") ? ROUND[src.id] : names}`;
+  });
+}
+
+function bracketMatch(m, byId) {
+  const labels = feedLabel(m, byId);
+  const anyScore = (m.teams || []).some((t) => t && t.score);
+  const row = (t, i) => {
+    const won = m.completed && m.winner === i, lost = m.completed && m.winner != null && m.winner !== i;
+    return `<div class="bm-team ${isCB7(t) ? "cb7" : ""} ${won ? "won" : ""} ${lost ? "lost" : ""}">
+      <span class="bm-name">${t ? esc(t.name) : `<span class="muted">${esc(labels[i] || "TBA")}</span>`}</span>
+      <span class="bm-score">${m.completed ? (anyScore ? t && t.score : won ? "W" : "L") : ""}</span>
+    </div>`;
+  };
+  const involved = (m.teams || []).some(isCB7);
+  return `<div class="bm ${involved ? "bm-cb7" : ""} ${m.skipped ? "bm-skip" : ""}">
+    <div class="bm-head"><span>${ROUND[m.id] || "Match " + m.id}</span><span>${m.skipped ? "Not needed" : m.completed ? "Final" : "Day " + m.day}</span></div>
+    ${row((m.teams || [])[0], 0)}${row((m.teams || [])[1], 1)}
+  </div>`;
+}
+
+function cb7Summary(matches) {
+  const mine = matches.filter((m) => (m.teams || []).some(isCB7));
+  let w = 0, l = 0;
+  mine.forEach((m) => {
+    if (!m.completed || m.winner == null) return;
+    isCB7(m.teams[m.winner]) ? w++ : l++;
+  });
+  const byId = Object.fromEntries(matches.map((m) => [m.id, m]));
+  const gf = byId[14], reset = byId[15];
+  let champ = null;
+  // Grand Final: slot 0 = lower-bracket winner, slot 1 = upper-bracket winner.
+  // If the upper team wins, it's over; otherwise the reset decides it.
+  if (reset && reset.completed && !reset.skipped && reset.winner != null) champ = reset.teams[reset.winner];
+  else if (gf && gf.completed && gf.winner === 1) champ = gf.teams[1];
+  const next = mine.find((m) => !m.completed && !m.skipped);
+  return { mine, w, l, champ, next, out: l >= 2 && !(champ && isCB7(champ)) };
+}
+
+function streamFor(d) {
+  const s = d.streams || {}, starts = d.day_starts || [];
+  const day = starts[1] && Date.now() >= starts[1] - 3 * 3600e3 ? 2 : 1;
+  return { day, id: s[day] || s[1] };
+}
+
+async function getWorldsData() {
+  const stat = await fetch(`data/worlds.json?t=${Date.now()}`, { cache: "no-store" }).then((r) => r.json());
+  try {
+    const ctrl = new AbortController(); const tm = setTimeout(() => ctrl.abort(), 8000);
+    const live = await fetch(WORLDS_LIVE, { signal: ctrl.signal, cache: "no-store" }).then((r) => { if (!r.ok) throw 0; return r.json(); });
+    clearTimeout(tm);
+    if (live && Array.isArray(live.matches) && live.matches.length) {
+      return { ...stat, ...live, teams: stat.teams, source: "official" };
+    }
+  } catch (e) { /* fall back to the snapshot */ }
+  return stat;
+}
+
+async function loadWorlds() {
+  const listEl = $("#w-matches");
+  if (!listEl) return;
+  let d;
+  try { d = await getWorldsData(); }
+  catch (e) {
+    if (!loadWorlds._last) listEl.innerHTML = `<div class="error-box">Couldn't load results right now. Please refresh in a moment.</div>`;
+    return;
+  }
+  const sig = JSON.stringify([d.matches, d.status]);
+  if (loadWorlds._last === sig) { $("#w-updated").textContent = updatedLine(d); return; }
+  loadWorlds._last = sig;
+
+  const matches = d.matches || [];
+  const byId = Object.fromEntries(matches.map((m) => [m.id, m]));
+  const S = cb7Summary(matches);
+  const starts = d.day_starts || [];
+  const now = Date.now();
+  const started = starts[0] && now >= starts[0];
+  const finished = d.status === "finished" || (S.champ != null);
+
+  if (d.watch_url) $("#w-watch").href = d.watch_url;
+  $("#w-meta").textContent = `${d.dates} · ${d.format}`;
+
+  let chip = started ? (finished ? "🏁 Finished" : "🔴 Live") : "⏳ Starts " + new Date(starts[0]).toLocaleString([], { weekday: "short", hour: "2-digit", minute: "2-digit" });
+  let line = "";
+  if (S.champ && isCB7(S.champ)) line = `<span class="ws-place">🏆 CB7 ARE WORLD CHAMPIONS!</span>`;
+  else if (S.out) line = `<span class="ws-chip">CB7 eliminated · ${S.w}W – ${S.l}L</span>`;
+  else if (S.mine.length) line = `<span class="ws-chip">${S.l ? "Lower bracket" : "Upper bracket"} · ${S.w}W – ${S.l}L</span>`;
+  $("#w-status").innerHTML = `<span class="ws-chip ${started && !finished ? "live" : ""}">${chip}</span>${line}`;
+
+  // stream embed
+  const st = streamFor(d);
+  const emb = $("#w-embed");
+  if (emb && st.id && emb.dataset.vid !== st.id) {
+    emb.dataset.vid = st.id;
+    emb.innerHTML = `<iframe src="https://www.youtube-nocookie.com/embed/${encodeURIComponent(st.id)}" title="Official broadcast, Day ${st.day}" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen loading="lazy"></iframe>`;
+    $("#w-yt").href = `https://www.youtube.com/watch?v=${encodeURIComponent(st.id)}`;
+  }
+
+  // CB7 path
+  const path = S.mine.map((m) => {
+    const i = m.teams.findIndex(isCB7), opp = m.teams[1 - i];
+    const st = m.completed ? (m.winner === i ? "win" : "loss") : "upcoming";
+    const sc = m.completed && m.teams.some((t) => t && t.score) ? { cb7: m.teams[i].score, opp: opp ? opp.score : null } : { cb7: null, opp: null };
+    return matchCard({ round: ROUND[m.id], opponent: opp ? opp.name : feedLabel(m, byId)[1 - i], status: st, ...sc,
+      time_utc: !m.completed && starts[m.day - 1] ? new Date(starts[m.day - 1]).toISOString() : "" });
+  });
+  listEl.innerHTML = path.join("") || `<div class="card muted">CB7's matches will appear here.</div>`;
+
+  // full bracket
+  const col = (ids) => ids.map((id) => byId[id]).filter(Boolean).map((m) => bracketMatch(m, byId)).join("");
+  $("#w-bracket").innerHTML = `
+    <div class="bk-col"><h4>Upper bracket</h4>${col([1, 2, 3, 4, 7, 8, 11])}</div>
+    <div class="bk-col"><h4>Lower bracket</h4>${col([5, 6, 9, 10, 12, 13])}</div>
+    <div class="bk-col"><h4>Grand final</h4>${col([14, 15])}</div>`;
+
+  $("#w-updated").textContent = updatedLine(d);
+  $("#w-teams").innerHTML = (d.teams || []).map((t) => `
+    <div class="card team-row ${t.us ? "us" : ""}">
+      <div class="display team-name">${esc(t.name)}</div>
+      <div class="muted team-route">${esc(t.route)}</div>
+    </div>`).join("");
+}
+
+function updatedLine(d) {
+  return d.source === "official"
+    ? `Live from the official event feed · checked ${timeAgo(d.fetched_at || new Date().toISOString())} · refreshes every minute`
+    : `Bracket snapshot · refreshes every minute`;
+}
+
 const MATCH_LABEL = { upcoming: "Upcoming", live: "Live now", win: "Won", loss: "Lost" };
 
 function matchCard(m) {
@@ -546,53 +692,15 @@ function matchCard(m) {
     <div class="card match-card ${esc(st)}">
       <div class="match-top">
         <span class="match-round">${esc(m.round || "")}</span>
-        <span class="match-status ${esc(st)}">${st === "live" ? '<span class="live-dot" style="margin:0 6px 0 0"></span>' : ""}${MATCH_LABEL[st] || esc(st)}</span>
+        <span class="match-status ${esc(st)}">${MATCH_LABEL[st] || esc(st)}</span>
       </div>
       <div class="match-vs">
         <div class="match-team us"><img src="assets/favicon.png" alt=""><span>CB7</span></div>
-        <div class="match-score">${hasScore ? `<b class="${st === "win" ? "w" : ""}">${m.cb7}</b><i>–</i><b class="${st === "loss" ? "w" : ""}">${m.opp}</b>` : `<span class="match-when">${when || "vs"}</span>`}</div>
+        <div class="match-score">${hasScore ? `<b class="${st === "win" ? "w" : ""}">${m.cb7}</b><i>–</i><b class="${st === "loss" ? "w" : ""}">${m.opp}</b>`
+          : st === "win" ? `<span class="match-res w">WON</span>` : st === "loss" ? `<span class="match-res">LOST</span>` : `<span class="match-when">${when || "vs"}</span>`}</div>
         <div class="match-team them"><span>${esc(m.opponent || "TBA")}</span></div>
       </div>
-      ${hasScore ? `<div class="match-foot muted">⭐ stars · Bo1 war${when ? " · " + when : ""}</div>` : ""}
     </div>`;
-}
-
-async function loadWorlds() {
-  const listEl = $("#w-matches");
-  if (!listEl) return;
-  let d;
-  try {
-    const res = await fetch(`data/worlds.json?t=${Date.now()}`, { cache: "no-store" });
-    d = await res.json();
-  } catch (e) {
-    if (loadWorlds._last) return; // keep showing the last good results
-    listEl.innerHTML = `<div class="error-box">Couldn't load results right now. Please refresh in a moment.</div>`;
-    return;
-  }
-  const sig = JSON.stringify(d);
-  if (loadWorlds._last === sig) return; // nothing new: skip re-render so cards don't re-animate
-  loadWorlds._last = sig;
-  if (d.watch_url) $("#w-watch").href = d.watch_url;
-  if (d.youtube_url) $("#w-yt").href = d.youtube_url;
-  $("#w-meta").textContent = `${d.dates} · ${d.format}`;
-  const statusText = {
-    upcoming: "⏳ Starting soon",
-    live: "🔴 Live now",
-    finished: "🏁 Finished",
-  }[d.status] || "";
-  $("#w-status").innerHTML = `
-    <span class="ws-chip ${esc(d.status)}">${statusText}</span>
-    ${d.placement ? `<span class="ws-place">🏆 CB7 placed ${esc(d.placement)}</span>` : ""}
-    ${d.status_note ? `<div class="muted ws-note">${esc(d.status_note)}</div>` : ""}`;
-  const matches = d.matches || [];
-  listEl.innerHTML = matches.length ? matches.map(matchCard).join("") : `<div class="card muted">No matches yet. Check back once Day 1 starts.</div>`;
-  const w = matches.filter((m) => m.status === "win").length, l = matches.filter((m) => m.status === "loss").length;
-  $("#w-updated").textContent = `Record so far: ${w}W – ${l}L · last updated ${timeAgo(d.updated)} · this page refreshes every minute`;
-  $("#w-teams").innerHTML = (d.teams || []).map((t) => `
-    <div class="card team-row ${t.us ? "us" : ""}">
-      <div class="display team-name">${esc(t.name)}</div>
-      <div class="muted team-route">${esc(t.route)}</div>
-    </div>`).join("");
 }
 
 // ---------- boot ----------

@@ -18,7 +18,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=6">
+<link rel="stylesheet" href="style.css?v=7">
 </head>
 <body data-page="worlds">
 <header class="site-header">
@@ -51,16 +51,23 @@
 </section>
 <section class="section" style="padding-top:28px">
   <div class="container">
-    <h3 class="display sub-h" style="margin-top:0">CB7's Matches</h3>
+    <div class="w-embed" id="w-embed"></div>
+    <h3 class="display sub-h">CB7's Path</h3>
     <div id="w-matches" class="match-list"><div class="loading">Loading results…</div></div>
     <div class="updated" id="w-updated"></div>
   </div>
 </section>
 <section class="section" style="padding-top:0">
   <div class="container">
+    <h3 class="display sub-h" style="margin-top:0">Full Bracket</h3>
+    <div class="bracket" id="w-bracket"></div>
+  </div>
+</section>
+<section class="section" style="padding-top:0">
+  <div class="container">
     <h3 class="display sub-h" style="margin-top:0">The 8 Teams</h3>
     <div id="w-teams" class="grid grid-2 teams-grid"></div>
-    <p class="muted" style="font-size:.8rem;margin-top:14px">Fan-made tracker. Results are added manually as matches finish, so check the official broadcast for the very latest.</p>
+    <p class="muted" style="font-size:.8rem;margin-top:14px">Fan-made tracker using the official event bracket. Check the broadcast for the very latest.</p>
   </div>
 </section>
 </main>
@@ -73,7 +80,7 @@
     This material is unofficial and is not endorsed by Supercell. For more information see Supercell's Fan Content Policy.
   </div>
 </footer>
-<script src="app.js?v=6"></script>
+<script src="app.js?v=7"></script>
 <div id="tsparticles"></div>
 <script src="https://cdn.jsdelivr.net/npm/@tsparticles/slim@3.5.0/tsparticles.slim.bundle.min.js"></script>
 <script src="particles.js?v=1"></script>

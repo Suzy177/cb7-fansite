@@ -305,6 +305,27 @@ a.player-card { color: inherit; }
   .match-score { font-size: 1.6rem; gap: 6px; }
 }
 
+.w-embed { aspect-ratio: 16 / 9; border-radius: var(--radius); overflow: hidden; border: 1px solid var(--line-solid); background: #000; }
+.w-embed:empty { display: none; }
+.w-embed iframe { width: 100%; height: 100%; border: 0; display: block; }
+.match-res { font-family: "Rajdhani", sans-serif; font-weight: 700; font-size: 1.4rem; color: var(--muted); letter-spacing: .06em; }
+.match-res.w { color: var(--win); }
+.bracket { display: grid; grid-template-columns: 1.1fr 1fr .9fr; gap: 18px; align-items: start; }
+.bk-col h4 { font-family: "Rajdhani", sans-serif; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: var(--cyan); font-size: .9rem; margin-bottom: 10px; }
+.bm { background: var(--card); border: 1px solid var(--line-solid); border-radius: 12px; overflow: hidden; margin-bottom: 10px; }
+.bm.bm-cb7 { border-color: rgba(255,31,31,.55); }
+.bm.bm-skip { opacity: .45; }
+.bm-head { display: flex; justify-content: space-between; padding: 6px 12px; font-size: .7rem; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); background: var(--card-2); }
+.bm-team { display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 8px 12px; font-size: .9rem; border-top: 1px solid var(--line-solid); }
+.bm-team.cb7 .bm-name { color: #ff8a8a; font-weight: 700; }
+.bm-team.won { background: rgba(47,210,122,.08); }
+.bm-team.won .bm-score { color: var(--win); }
+.bm-team.lost { opacity: .55; }
+.bm-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
+.bm-name .muted { font-size: .8rem; }
+.bm-score { font-family: "Rajdhani", sans-serif; font-weight: 700; flex-shrink: 0; }
+@media (max-width: 900px) { .bracket { grid-template-columns: 1fr; } }
+
 /* ---------- clan page ---------- */
 .tabs { display: inline-flex; flex-wrap: wrap; gap: 6px; padding: 6px; background: var(--card); border: 1px solid var(--line-solid); border-radius: 12px; margin-bottom: 24px; }
 .tab {

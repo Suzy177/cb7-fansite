@@ -1,24 +1,416 @@
 {
-  "event": "Clash of Clans World Championship 2026 – World Finals",
-  "dates": "14–15 November 2026",
-  "format": "8-team double elimination · every match is a Bo1 war",
-  "watch_url": "https://event.supercell.com/clashofclans/en",
-  "youtube_url": "https://www.youtube.com/@ClashOfClans",
-  "status": "upcoming",
-  "status_note": "Day 1 starts today. Results are added here as matches finish.",
-  "placement": "",
-  "updated": "2026-11-14T01:00:00Z",
-  "matches": [
-    { "round": "Upper Bracket – Round 1", "opponent": "TBA", "cb7": null, "opp": null, "status": "upcoming", "time_utc": "" }
-  ],
-  "teams": [
-    { "name": "ZOOS Esports", "route": "June Monthly Final winner" },
-    { "name": "Repotted Gaming", "route": "July Monthly Final winner" },
-    { "name": "Vatic Esports", "route": "August Monthly Final winner" },
-    { "name": "HTM Esports", "route": "September Monthly Final winner" },
-    { "name": "FuChing NO.1", "route": "China Qualifier" },
-    { "name": "Tribe Gaming", "route": "LCQ 1st · reigning champion" },
-    { "name": "CB7 Esports", "route": "LCQ 2nd", "us": true },
-    { "name": "MG Esports", "route": "LCQ 3rd" }
-  ]
+ "event": "Clash of Clans World Championship 2026 – World Finals",
+ "dates": "14–15 November 2026",
+ "format": "8-team double elimination · every match is a Bo1 war",
+ "watch_url": "https://event.supercell.com/clashofclans/en",
+ "updated": "2026-11-14T01:15:00Z",
+ "source": "snapshot",
+ "status": "upcoming",
+ "day_starts": [
+  1794664800000,
+  1794751200000
+ ],
+ "streams": {
+  "1": "yS9uYSD4Ktk",
+  "2": "YyfyWlsjgV4"
+ },
+ "matches": [
+  {
+   "id": 1,
+   "day": 1,
+   "stage": "upper",
+   "teams": [
+    {
+     "name": "MG Esports",
+     "short": "MG",
+     "score": 0
+    },
+    {
+     "name": "ZOOS Esports",
+     "short": "ZOOS",
+     "score": 0
+    }
+   ],
+   "completed": false,
+   "skipped": false,
+   "winner": null,
+   "from": [
+    {
+     "match": 0,
+     "result": "none"
+    },
+    {
+     "match": 0,
+     "result": "none"
+    }
+   ]
+  },
+  {
+   "id": 2,
+   "day": 1,
+   "stage": "upper",
+   "teams": [
+    {
+     "name": "FuChing NO.1",
+     "short": "FC",
+     "score": 0
+    },
+    {
+     "name": "HTM Esports",
+     "short": "HTM",
+     "score": 0
+    }
+   ],
+   "completed": false,
+   "skipped": false,
+   "winner": null,
+   "from": [
+    {
+     "match": 0,
+     "result": "none"
+    },
+    {
+     "match": 0,
+     "result": "none"
+    }
+   ]
+  },
+  {
+   "id": 3,
+   "day": 1,
+   "stage": "upper",
+   "teams": [
+    {
+     "name": "CB7 Esports",
+     "short": "CB7",
+     "score": 0
+    },
+    {
+     "name": "Repotted Gaming",
+     "short": "RPG",
+     "score": 0
+    }
+   ],
+   "completed": false,
+   "skipped": false,
+   "winner": null,
+   "from": [
+    {
+     "match": 0,
+     "result": "none"
+    },
+    {
+     "match": 0,
+     "result": "none"
+    }
+   ]
+  },
+  {
+   "id": 4,
+   "day": 1,
+   "stage": "upper",
+   "teams": [
+    {
+     "name": "Tribe Gaming",
+     "short": "TRB",
+     "score": 0
+    },
+    {
+     "name": "Vatic",
+     "short": "VTC",
+     "score": 0
+    }
+   ],
+   "completed": false,
+   "skipped": false,
+   "winner": null,
+   "from": [
+    {
+     "match": 0,
+     "result": "none"
+    },
+    {
+     "match": 0,
+     "result": "none"
+    }
+   ]
+  },
+  {
+   "id": 5,
+   "day": 1,
+   "stage": "lower",
+   "teams": [
+    null,
+    null
+   ],
+   "completed": false,
+   "skipped": false,
+   "winner": null,
+   "from": [
+    {
+     "match": 2,
+     "result": "loser"
+    },
+    {
+     "match": 1,
+     "result": "loser"
+    }
+   ]
+  },
+  {
+   "id": 6,
+   "day": 1,
+   "stage": "lower",
+   "teams": [
+    null,
+    null
+   ],
+   "completed": false,
+   "skipped": false,
+   "winner": null,
+   "from": [
+    {
+     "match": 3,
+     "result": "loser"
+    },
+    {
+     "match": 4,
+     "result": "loser"
+    }
+   ]
+  },
+  {
+   "id": 7,
+   "day": 1,
+   "stage": "upper",
+   "teams": [
+    null,
+    null
+   ],
+   "completed": false,
+   "skipped": false,
+   "winner": null,
+   "from": [
+    {
+     "match": 2,
+     "result": "winner"
+    },
+    {
+     "match": 1,
+     "result": "winner"
+    }
+   ]
+  },
+  {
+   "id": 8,
+   "day": 1,
+   "stage": "upper",
+   "teams": [
+    null,
+    null
+   ],
+   "completed": false,
+   "skipped": false,
+   "winner": null,
+   "from": [
+    {
+     "match": 4,
+     "result": "winner"
+    },
+    {
+     "match": 3,
+     "result": "winner"
+    }
+   ]
+  },
+  {
+   "id": 9,
+   "day": 2,
+   "stage": "lower",
+   "teams": [
+    null,
+    null
+   ],
+   "completed": false,
+   "skipped": false,
+   "winner": null,
+   "from": [
+    {
+     "match": 6,
+     "result": "winner"
+    },
+    {
+     "match": 7,
+     "result": "loser"
+    }
+   ]
+  },
+  {
+   "id": 10,
+   "day": 2,
+   "stage": "lower",
+   "teams": [
+    null,
+    null
+   ],
+   "completed": false,
+   "skipped": false,
+   "winner": null,
+   "from": [
+    {
+     "match": 5,
+     "result": "winner"
+    },
+    {
+     "match": 8,
+     "result": "loser"
+    }
+   ]
+  },
+  {
+   "id": 11,
+   "day": 2,
+   "stage": "upper",
+   "teams": [
+    null,
+    null
+   ],
+   "completed": false,
+   "skipped": false,
+   "winner": null,
+   "from": [
+    {
+     "match": 8,
+     "result": "winner"
+    },
+    {
+     "match": 7,
+     "result": "winner"
+    }
+   ]
+  },
+  {
+   "id": 12,
+   "day": 2,
+   "stage": "lower",
+   "teams": [
+    null,
+    null
+   ],
+   "completed": false,
+   "skipped": false,
+   "winner": null,
+   "from": [
+    {
+     "match": 9,
+     "result": "winner"
+    },
+    {
+     "match": 10,
+     "result": "winner"
+    }
+   ]
+  },
+  {
+   "id": 13,
+   "day": 2,
+   "stage": "lower",
+   "teams": [
+    null,
+    null
+   ],
+   "completed": false,
+   "skipped": false,
+   "winner": null,
+   "from": [
+    {
+     "match": 12,
+     "result": "winner"
+    },
+    {
+     "match": 11,
+     "result": "loser"
+    }
+   ]
+  },
+  {
+   "id": 14,
+   "day": 2,
+   "stage": "upper",
+   "teams": [
+    null,
+    null
+   ],
+   "completed": false,
+   "skipped": false,
+   "winner": null,
+   "from": [
+    {
+     "match": 13,
+     "result": "winner"
+    },
+    {
+     "match": 11,
+     "result": "winner"
+    }
+   ]
+  },
+  {
+   "id": 15,
+   "day": 2,
+   "stage": "upper",
+   "teams": [
+    null,
+    null
+   ],
+   "completed": false,
+   "skipped": false,
+   "winner": null,
+   "from": [
+    {
+     "match": 14,
+     "result": "loser"
+    },
+    {
+     "match": 14,
+     "result": "winner"
+    }
+   ]
+  }
+ ],
+ "teams": [
+  {
+   "name": "ZOOS Esports",
+   "route": "June Monthly Final winner"
+  },
+  {
+   "name": "Repotted Gaming",
+   "route": "July Monthly Final winner"
+  },
+  {
+   "name": "Vatic Esports",
+   "route": "August Monthly Final winner"
+  },
+  {
+   "name": "HTM Esports",
+   "route": "September Monthly Final winner"
+  },
+  {
+   "name": "FuChing NO.1",
+   "route": "China Qualifier"
+  },
+  {
+   "name": "Tribe Gaming",
+   "route": "LCQ 1st · reigning champion"
+  },
+  {
+   "name": "CB7 Esports",
+   "route": "LCQ 2nd",
+   "us": true
+  },
+  {
+   "name": "MG Esports",
+   "route": "LCQ 3rd"
+  }
+ ]
 }
