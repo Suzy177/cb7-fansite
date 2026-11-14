@@ -75,8 +75,7 @@ main { flex: 1; }
   position: relative; overflow: hidden;
   background:
     radial-gradient(ellipse at 15% 20%, rgba(255,31,31,.22), transparent 55%),
-    radial-gradient(ellipse at 90% 80%, rgba(26,107,255,.22), transparent 55%),
-    var(--bg);
+    radial-gradient(ellipse at 90% 80%, rgba(26,107,255,.22), transparent 55%);
 }
 .hero-inner {
   max-width: 1160px; margin: 0 auto; padding: 56px 20px 0;
@@ -348,3 +347,14 @@ td.rank { color: var(--muted); width: 40px; }
   .section { padding: 44px 0; }
   .war-side .stars { font-size: 2rem; }
 }
+
+/* ---------- motion effects (effects.js) ---------- */
+#scroll-progress {
+  position: fixed; top: 0; left: 0; right: 0; height: 3px; z-index: 100;
+  transform-origin: 0 50%; transform: scaleX(0); pointer-events: none;
+  background: linear-gradient(90deg, var(--red), var(--blue));
+  box-shadow: 0 0 10px rgba(26,107,255,.6);
+}
+.hero h1 .w { display: inline-block; }
+html.fx .player-card { transition: border-color .2s; }
+html.fx .player-card:hover { transform: none; }
